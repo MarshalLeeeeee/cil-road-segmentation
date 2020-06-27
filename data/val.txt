@@ -1,0 +1,10 @@
+training/images/satImage_025.png	training/groundtruth/satImage_025.png
+training/images/satImage_031.png	training/groundtruth/satImage_031.png
+training/images/satImage_062.png	training/groundtruth/satImage_062.png
+training/images/satImage_066.png	training/groundtruth/satImage_066.png
+training/images/satImage_078.png	training/groundtruth/satImage_078.png
+training/images/satImage_081.png	training/groundtruth/satImage_081.png
+training/images/satImage_083.png	training/groundtruth/satImage_083.png
+training/images/satImage_091.png	training/groundtruth/satImage_091.png
+training/images/satImage_096.png	training/groundtruth/satImage_096.png
+training/images/satImage_100.png	training/groundtruth/satImage_100.png
