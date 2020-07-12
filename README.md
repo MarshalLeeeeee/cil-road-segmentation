@@ -15,7 +15,7 @@ Add new branch: feature/xxx to modify codes
  - To validate the model save / reload
  - To validate this code does equal to the previous one (by maybe training it and see if the score is close to the previous)
 
-#### improvemnets
+#### Improvements
  - random rotation
  - there should still be some unnecessary codes can be removed
  - network: add attention in res block
