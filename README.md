@@ -18,5 +18,4 @@ Add new branch: feature/xxx to modify codes
 #### improvemnets
  - random rotation
  - there should still be some unnecessary codes can be removed
- - network
-  - add attention in res block
+ - network: add attention in res block
