@@ -11,11 +11,7 @@ from collections import OrderedDict
 from config import config
 from dataloader import get_val_loader, OurDataLoader
 from network import Backbone_Res101
-from util import normalize_reverse
-
-def ensure_dir(path):
-    if not os.path.isdir(path):
-        os.makedirs(path)
+from util import normalize_reverse, ensure_dir
 
 def eval():
 

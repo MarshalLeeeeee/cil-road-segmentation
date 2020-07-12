@@ -1,10 +1,23 @@
 import cv2
+import os
 import numpy as np
 import numbers
 import random
 import collections
 import torch
 import torch.nn as nn
+
+################# os ###################
+
+def link_file(src, target):
+    if os.path.isdir(target) or os.path.isfile(target):
+        os.remove(target)
+    os.system('ln -s {} {}'.format(src, target))
+
+
+def ensure_dir(path):
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 ############# init function ##############
 

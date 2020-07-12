@@ -12,7 +12,7 @@ from torch.nn.modules.batchnorm import BatchNorm2d
 from config import config
 from dataloader import get_train_loader, get_val_loader, OurDataLoader, data_setting
 from network import Backbone_Res101
-from util import init_weight, group_weight, normalize
+from util import init_weight, group_weight, normalize, link_file, ensure_dir
 
 
 def link_file(src, target):

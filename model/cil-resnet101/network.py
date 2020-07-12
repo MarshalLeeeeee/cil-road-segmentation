@@ -1,10 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
-from torch.utils.checkpoint import checkpoint
-from config import config
 from torch.nn.modules.batchnorm import BatchNorm2d
+
+from config import config
 from resnet import resnet101
 from util import AttentionRefinement, FeatureFusion
 
@@ -78,12 +77,6 @@ class Backbone_Res101(nn.Module):
         result = F.interpolate(result, scale_factor=4, mode='bilinear', align_corners=True)
 
         return result
-
-        # if self.is_training:
-        #     loss = self.loss(result,gt)
-        #     return loss
-        # else:
-        #     return F.log_softmax(result, dim=1)
     
 class ConvBnRelu(nn.Module):
     def __init__(self, in_planes, out_planes, ksize, stride, pad, dilation=1,
