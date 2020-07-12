@@ -41,16 +41,6 @@ C.eval_source = osp.join(C.dataset_path, "val.txt")
 C.test_source = osp.join(C.dataset_path, "test.txt")
 C.is_test = False
 
-"""Path Config"""
-
-
-def add_path(path):
-    if path not in sys.path:
-        sys.path.insert(0, path)
-
-
-add_path(osp.join(C.root_dir, 'furnace'))
-
 
 """Image Config"""
 C.num_classes = 2
