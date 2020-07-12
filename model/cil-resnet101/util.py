@@ -95,7 +95,6 @@ def generate_random_crop_pos(ori_size, crop_size):
 
     if w > crop_w:
         pos_w = random.randint(0, w - crop_w + 1)
-
     return pos_h, pos_w
 
 def pad_image_to_shape(img, shape, border_mode, value):
@@ -111,7 +110,6 @@ def pad_image_to_shape(img, shape, border_mode, value):
 
     img = cv2.copyMakeBorder(img, margin[0], margin[1], margin[2], margin[3],
                              border_mode, value=value)
-
     return img, margin
 
 def random_scale(img, gt, scales):
@@ -120,7 +118,6 @@ def random_scale(img, gt, scales):
     sw = int(img.shape[1] * scale)
     img = cv2.resize(img, (sw, sh), interpolation=cv2.INTER_LINEAR)
     gt = cv2.resize(gt, (sw, sh), interpolation=cv2.INTER_NEAREST)
-
     return img, gt, scale
 
 
@@ -128,16 +125,29 @@ def random_mirror(img, gt):
     if random.random() >= 0.5:
         img = cv2.flip(img, 1)
         gt = cv2.flip(gt, 1)
-
     return img, gt
 
 
 def normalize(img, mean, std):
-    # pytorch pretrained model need the input range: 0-1
     img = img.astype(np.float32) / 255.0
     img = img - mean
     img = img / std
+    return img
 
+
+def normalize_reverse(img, mean, std):
+    img = img * std
+    img = img + mean
+    img = img * 255.0
+    return img
+
+
+def img_to_black(img, threshold=50):
+    img = img.astype(np.int64)
+    idx = img[:, :] > threshold
+    idx_0 = img[:, :] <= threshold
+    img[idx] = 1
+    img[idx_0] = 0
     return img
 
 

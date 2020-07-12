@@ -9,7 +9,7 @@ import torch.nn as nn
 from collections import OrderedDict
 
 from config import config
-from dataloader import get_val_loader, OurDataLoader
+from dataloader import get_test_loader, OurDataLoader
 from network import Backbone_Res101
 from util import normalize_reverse
 
@@ -17,14 +17,14 @@ def ensure_dir(path):
     if not os.path.isdir(path):
         os.makedirs(path)
 
-def eval():
+def test():
 
     seed = config.seed
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
 
-    valid_loader = get_val_loader(OurDataLoader)
+    test_loader = get_test_loader(OurDataLoader)
 
     model = Backbone_Res101(out_planes=config.num_classes)
 
@@ -49,11 +49,11 @@ def eval():
     criterion = nn.CrossEntropyLoss(reduction='mean',ignore_index=255)
 
     bar_format = '{desc}[{elapsed}<{remaining},{rate_fmt}]'
-    pbar_eval = tqdm(range(config.num_eval_imgs), file=sys.stdout, bar_format=bar_format)
-    dataloader_eval = iter(valid_loader)
-    loss_sum_eval = 0.0
-    for idx in pbar_eval:
-        minibatch = dataloader_eval.next()
+    pbar_test = tqdm(range(config.num_test_imgs), file=sys.stdout, bar_format=bar_format)
+    dataloader_test = iter(test_loader)
+    loss_sum_test = 0.0
+    for idx in pbar_test:
+        minibatch = dataloader_test.next()
         imgs = minibatch['data']
         gts = minibatch['label']
 
@@ -65,23 +65,20 @@ def eval():
 
         imgs_sv = imgs.cpu().detach().numpy().squeeze().transpose((1,2,0))
         imgs_sv = normalize_reverse(imgs_sv, config.image_mean, config.image_std)
-        gts_sv = gts.cpu().detach().numpy().squeeze() * 255
         pred_sv = pred.cpu().detach().numpy().squeeze().transpose((1, 2, 0)).argmax(2) * 237
 
         name = str(idx)
-        fn = name + '-img-eval.png'
+        fn = name + '-img-test.png'
         cv2.imwrite(os.path.join('.', fn), imgs_sv)
-        fnl = name + '-label-eval.png'
-        cv2.imwrite(os.path.join('.', fnl), gts_sv)
-        fnp = name + '-pred-eval.png'
+        fnp = name + '-pred-test.png'
         cv2.imwrite(os.path.join('.', fnp), pred_sv)
 
-        loss_sum_eval += loss.item()
-        print_str = '=====val=====Iter{}/{}:'.format(idx + 1, config.num_eval_imgs) \
-                    + ' loss=%.4f' % (loss_sum_eval / (idx+1))
+        loss_sum_test += loss.item()
+        print_str = '=====test=====Iter{}/{}:'.format(idx + 1, config.num_test_imgs) \
+                    + ' loss=%.4f' % (loss_sum_test / (idx+1))
 
-        pbar_eval.set_description(print_str, refresh=False)
+        pbar_test.set_description(print_str, refresh=False)
 
 
 if __name__ == "__main__":
-    eval()
+    test()

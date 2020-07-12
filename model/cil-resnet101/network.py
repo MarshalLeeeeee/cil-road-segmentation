@@ -5,18 +5,17 @@ import numpy as np
 from torch.utils.checkpoint import checkpoint
 from config import config
 from torch.nn.modules.batchnorm import BatchNorm2d
-from base_model import resnet101
+from resnet import resnet101
 from util import AttentionRefinement, FeatureFusion
 
 class Backbone_Res101(nn.Module):
-    def __init__(self, out_planes, is_training):
+    def __init__(self, out_planes):
         super(Backbone_Res101, self).__init__()
         self.layers = []
-        self.is_training = is_training
        
         conv_channel = 128
         # use base model of resnet 101 from resnet.py
-        self.context = resnet101(pretrained_model=None, norm_layer=BatchNorm2d, bn_eps=config.bn_eps, bn_momentum=config.bn_momentum)
+        self.context = resnet101(norm_layer=BatchNorm2d, bn_eps=config.bn_eps, bn_momentum=config.bn_momentum)
         self.context_refine = nn.Sequential(
                         nn.AdaptiveAvgPool2d(1),
                         ConvBnRelu(2048,conv_channel, 1, 1, 0, has_bn=True, has_relu=True, has_bias=False, norm_layer=BatchNorm2d)
@@ -52,9 +51,9 @@ class Backbone_Res101(nn.Module):
         self.layers.append(self.refines)
         self.layers.append(self.res_top_refine)
 
-        self.loss = nn.CrossEntropyLoss(reduction='mean',ignore_index=255)	
+        self.loss = nn.CrossEntropyLoss(reduction='mean',ignore_index=255)
         
-    def forward(self, x, gt=None):
+    def forward(self, x):
         context_out = self.context(x)
         context_out.reverse()
 
@@ -78,11 +77,13 @@ class Backbone_Res101(nn.Module):
         # upsampling to original size of image
         result = F.interpolate(result, scale_factor=4, mode='bilinear', align_corners=True)
 
-        if self.is_training:
-            loss = self.loss(result,gt)
-            return loss
-        else:
-            return F.log_softmax(result, dim=1)
+        return result
+
+        # if self.is_training:
+        #     loss = self.loss(result,gt)
+        #     return loss
+        # else:
+        #     return F.log_softmax(result, dim=1)
     
 class ConvBnRelu(nn.Module):
     def __init__(self, in_planes, out_planes, ksize, stride, pad, dilation=1,

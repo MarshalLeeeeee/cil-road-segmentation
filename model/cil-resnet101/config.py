@@ -64,6 +64,7 @@ C.test_image_width = 608
 C.gt_down_sampling = 1
 C.num_train_imgs = 90
 C.num_eval_imgs = 10
+C.num_test_imgs = 94
 
 """ Settings for network, this would be different for each kind of model"""
 C.fix_bias = True
@@ -78,9 +79,10 @@ C.lr = 1e-2
 C.lr_power = 0.9
 C.momentum = 0.9
 C.weight_decay = 5e-4
-C.batch_size = 4
+C.batch_size = 2
 C.nepochs = 6
-C.niters_per_epoch = 1
+C.checkiter = 5
+C.niters_per_epoch = 10
 C.num_workers = 4
 C.train_scale_array = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2.0]
 
@@ -97,17 +99,3 @@ C.snapshot_iter = 50
 C.record_info_iter = 20
 C.display_iter = 50
 
-
-def open_tensorboard():
-    pass
-
-
-if __name__ == '__main__':
-    print(config.epoch_num)
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-tb', '--tensorboard', default=False, action='store_true')
-    args = parser.parse_args()
-
-    if args.tensorboard:
-        open_tensorboard()
