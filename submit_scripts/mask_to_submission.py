@@ -1,11 +1,14 @@
+#!/usr/bin/env python3
+
 import os
+import time
+
 import numpy as np
 import matplotlib.image as mpimg
 import re
-import glob
-import argparse
 
 foreground_threshold = 0.25 # percentage of pixels > 1 required to assign a foreground label to a patch
+
 
 # assign a label to a patch
 def patch_to_label(patch):
@@ -18,8 +21,7 @@ def patch_to_label(patch):
 
 def mask_to_submission_strings(image_filename):
     """Reads a single image and outputs the strings that should go into the submission file"""
-    tmp = os.path.basename(image_filename) # prevent digits in the path
-    img_number = int(re.search(r"\d+", tmp).group(0))
+    img_number = int(re.search(r"\d+", image_filename).group(0))
     im = mpimg.imread(image_filename)
     patch_size = 16
     for j in range(0, im.shape[1], patch_size):
@@ -37,21 +39,21 @@ def masks_to_submission(submission_filename, *image_filenames):
             f.writelines('{}\n'.format(s) for s in mask_to_submission_strings(fn))
 
 
+eval_dir = 'evaluation/'
+submission_dir = 'submission/'
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--image_path', default='pred', type=str)
-    parser.add_argument('-n', '--name', default='submission', type=str)
+    if not os.path.exists(submission_dir):
+        os.makedirs(submission_dir)
 
-    args = parser.parse_args()
+    timestamp = time.localtime()
+    time_string = time.strftime("%m-%d_%H-%M", timestamp)
+    submission_file_name = time_string + '.csv'
+    submission_file_path = os.path.join(submission_dir, submission_file_name)
 
-    submission_filename = args.name + '.csv'
-    image_filenames = []
-    # cnt = 0
-    for i in glob.glob(args.image_path + '*png'):
-        if i[-5] == 'd':
-            image_filenames.append(i)
-            # cnt += 1
-            # print(cnt, i)
-        # image_filenames.append(i)
+    image_file_names = os.listdir(eval_dir)
+    image_file_paths = map(lambda name: os.path.join(eval_dir, name), image_file_names)
 
-    masks_to_submission(submission_filename, *image_filenames)
+    masks_to_submission(submission_file_path, *image_file_paths)
+
+    print('Encoding finished. (Output: {})'.format(submission_file_path))
