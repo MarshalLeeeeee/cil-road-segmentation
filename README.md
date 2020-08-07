@@ -1,6 +1,6 @@
 # Road Segmentation
 
-A [Computational Intelligence Lab](http://www.da.inf.ethz.ch/teaching/2020/CIL/) (spring, 2020) project.
+A submission version of [Computational Intelligence Lab](http://www.da.inf.ethz.ch/teaching/2020/CIL/) (spring, 2020) project.
 
 
 
