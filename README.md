@@ -4,7 +4,7 @@ A [Computational Intelligence Lab](http://www.da.inf.ethz.ch/teaching/2020/CIL/)
 
 
 
-Team member: Yiqun Liu, Minchao Liu, Zirun Wang, Zehao Wei
+Team member: [Yiqun Liu](https://github.com/yiqun-liu), [Minchao Li](https://github.com/MarshalLeeeeee), [Zirun Wang](https://github.com/wzrain), [Zehao Wei](https://github.com/zehaowei)
 
 
 
